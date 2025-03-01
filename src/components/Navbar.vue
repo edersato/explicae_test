@@ -1,7 +1,7 @@
 <template>
   <div>
     <nav class="navbar-body-tertiary">
-      <div class="container-fluid">
+      <div class="container-fluid mb-2">
         <img src="../assets/logo.png" class="logo" alt="logo_explicae">
       </div>
     </nav>

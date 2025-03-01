@@ -17,13 +17,10 @@ export default {
 
 <style lang="scss">
 
-/* Cores do sistema */
-$bg-main: #eff0f0;         // Fundo principal
+$bg-main: #eff0f0;
 
 #app {
   background-color: $bg-main !important;
 }
-
-
 
 </style>

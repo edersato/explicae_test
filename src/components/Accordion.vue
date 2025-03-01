@@ -1,91 +1,38 @@
 <template>
-  <div class="accordion" id="accordionExample">
-    <div class="accordion-item">
-      <h2 class="accordion-header" id="headingOne">
+  <div class="accordion" :id="accordionId">
+    <div class="accordion-item" v-for="(item, index) in items" :key="index">
+      <h2 class="accordion-header" :id="`heading-${accordionId}-${index}`">
         <button
-          class="accordion-button headingAccordion"
+          class="accordion-button"
           type="button"
           data-bs-toggle="collapse"
-          data-bs-target="#collapseOne"
-          aria-expanded="true"
-          aria-controls="collapseOne"
+          :data-bs-target="`#collapse-${accordionId}-${index}`"
+          :aria-expanded="item.active ? 'true' : 'false'"
+          :aria-controls="`collapse-${accordionId}-${index}`"
         >
-          Accordion Item #1
+        <div class="headingInfo">
+          <span class="title">{{ item.title }}</span>
+          <div class="details mt-2">
+            <span class="me-3"> {{ item.aulas }} </span>
+            <span class="me-3"> {{ item.exercicios }} </span>
+            <span class="me-3"> {{ item.materiais }} </span>
+          </div>
+        </div>
         </button>
       </h2>
       <div
-        id="collapseOne"
-        class="accordion-collapse collapse show"
-        aria-labelledby="headingOne"
-        data-bs-parent="#accordionExample"
+        :id="`collapse-${accordionId}-${index}`"
+        class="accordion-collapse collapse"
+        :class="{ show: item.active }"
+        :aria-labelledby="`heading-${accordionId}-${index}`"
+        :data-bs-parent="`#${accordionId}`"
       >
         <div class="accordion-body">
-          <div class="accordion" id="sub-accordionExample">
-            <div class="accordion-item">
-              <h2 class="accordion-header" id="sub-headingOne">
-                <button
-                  class="accordion-button"
-                  type="button"
-                  data-bs-toggle="collapse"
-                  data-bs-target="#sub-collapseOne"
-                  aria-expanded="true"
-                  aria-controls="collapseOne"
-                >
-                  Accordion Item #1
-                </button>
-              </h2>
-              <div
-                id="sub-collapseOne"
-                class="accordion-collapse collapse show"
-                aria-labelledby="sub-headingOne"
-                data-bs-parent="#sub-accordionExample"
-              >
-                <div class="accordion-body">
-                  <strong>This is the first item's accordion body.</strong> It
-                  is hidden by default, until the collapse plugin adds the
-                  appropriate classes that we use to style each element. These
-                  classes control the overall appearance, as well as the showing
-                  and hiding via CSS transitions. You can modify any of this
-                  with custom CSS or overriding our default variables. It's also
-                  worth noting that just about any HTML can go within the
-                  <code>.accordion-body</code>, though the transition does limit
-                  overflow.
-                </div>
-              </div>
-            </div>
-            <div class="accordion-item">
-              <h2 class="accordion-header" id="sub-headingTwo">
-                <button
-                  class="accordion-button collapsed"
-                  type="button"
-                  data-bs-toggle="collapse"
-                  data-bs-target="#sub-collapseTwo"
-                  aria-expanded="false"
-                  aria-controls="sub-collapseTwo"
-                >
-                  Accordion Item #2
-                </button>
-              </h2>
-              <div
-                id="sub-collapseTwo"
-                class="accordion-collapse collapse"
-                aria-labelledby="sub-headingTwo"
-                data-bs-parent="#sub-accordionExample"
-              >
-                <div class="accordion-body">
-                  <strong>This is the second item's accordion body.</strong> It
-                  is hidden by default, until the collapse plugin adds the
-                  appropriate classes that we use to style each element. These
-                  classes control the overall appearance, as well as the showing
-                  and hiding via CSS transitions. You can modify any of this
-                  with custom CSS or overriding our default variables. It's also
-                  worth noting that just about any HTML can go within the
-                  <code>.accordion-body</code>, though the transition does limit
-                  overflow.
-                </div>
-              </div>
-            </div>
-          </div>
+          <SubAccordion
+            v-if="item.subItems && item.subItems.length"
+            :items="item.subItems"
+            :subAccordionId="`nested-${accordionId}-${index}`"
+          />
         </div>
       </div>
     </div>
@@ -93,13 +40,38 @@
 </template>
 
 <script>
-export default {};
+import SubAccordion from "./SubAccordion.vue";
+
+export default {
+  name: "Accordion",
+  components: { SubAccordion },
+  props: {
+    items: {
+      type: Array,
+      default: () => [],
+    },
+    accordionId: {
+      type: String,
+      default: "accordion",
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
-$purple-select: #eccbfc; // Destaque
 
-.headingAccordion:active {
-  background-color: $purple-select;
+.headingInfo {
+  display: flex;
+  flex-direction: column;
+  font-weight: 500;
+  color: #000;
+
+  .title {
+    font-size: 1.5rem;
+    
+  } 
+  .details {
+    font-size: 0.8rem;
+  }
 }
 </style>
