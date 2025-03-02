@@ -2,25 +2,19 @@ import { createStore } from 'vuex';
 
 export default createStore({
   state: {
-    selectedCheckboxes: {} // Objeto para armazenar os checkboxes selecionados
+    selectedCheckboxes: {} // Alterado para objeto
   },
   mutations: {
-    TOGGLE_CHECKBOX(state, { componentId, checkboxId }) {
-      if (!state.selectedCheckboxes[componentId]) {
-        state.selectedCheckboxes[componentId] = [];
-      }
-
-      const index = state.selectedCheckboxes[componentId].indexOf(checkboxId);
-      if (index === -1) {
-        state.selectedCheckboxes[componentId].push(checkboxId);
-      } else {
-        state.selectedCheckboxes[componentId].splice(index, 1);
-      }
+    UPDATE_SELECTED_CHECKBOXES(state, { groupId, values }) {
+      state.selectedCheckboxes[groupId] = values;
+    }
+  },
+  actions: {
+    updateSelectedCheckboxes({ commit }, { groupId, values }) {
+      commit('UPDATE_SELECTED_CHECKBOXES', { groupId, values });
     }
   },
   getters: {
-    getSelectedCheckboxes: (state) => (componentId) => {
-      return state.selectedCheckboxes[componentId] || [];
-    }
+    selectedCount: (state) => (groupId) => state.selectedCheckboxes[groupId]?.length || 0
   }
 });
