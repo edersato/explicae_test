@@ -1,5 +1,6 @@
 import { createApp } from 'vue'
 import App from './App.vue'
+import store from '../store'
 
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -12,4 +13,5 @@ library.add(faPen);
 
 createApp(App)
     .component('font-awesome-icon', FontAwesomeIcon)
+    .use(store)
     .mount('#app')

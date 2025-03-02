@@ -28,7 +28,7 @@
         :data-bs-parent="`#${accordionId}`"
       >
         <div class="accordion-body">
-          <SubAccordion
+          <Aulas
             v-if="item.subItems && item.subItems.length"
             :items="item.subItems"
             :subAccordionId="`nested-${accordionId}-${index}`"
@@ -40,11 +40,11 @@
 </template>
 
 <script>
-import SubAccordion from "./SubAccordion.vue";
+import Aulas from "./Aulas.vue";
 
 export default {
-  name: "Accordion",
-  components: { SubAccordion },
+  name: "Cadernos",
+  components: { Aulas },
   props: {
     items: {
       type: Array,
@@ -52,7 +52,7 @@ export default {
     },
     accordionId: {
       type: String,
-      default: "accordion",
+      default: "accordionId",
     },
   },
 };
