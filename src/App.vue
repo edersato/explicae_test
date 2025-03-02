@@ -20,7 +20,7 @@ export default {
 $bg-main: #eff0f0;
 
 #app {
-  background-color: $bg-main !important;
+  background-color: $bg-main;
 }
 
 </style>

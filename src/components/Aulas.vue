@@ -1,6 +1,10 @@
 <template>
   <div class="accordion" :id="subAccordionId">
-    <div class="accordion-item" v-for="(sub, subIndex) in items" :key="subIndex">
+    <div
+      class="accordion-item"
+      v-for="(sub, subIndex) in items"
+      :key="subIndex"
+    >
       <h2
         class="accordion-header"
         :id="`nested-heading-${subAccordionId}-${subIndex}`"
@@ -20,7 +24,6 @@
               <span class="me-3"> {{ sub.aulas }} </span>
               <span class="me-3"> {{ sub.exercicios }} </span>
               <span class="me-3"> {{ sub.materiais }} </span>
-
             </div>
           </div>
         </button>
@@ -33,16 +36,24 @@
         :data-bs-parent="`#${subAccordionId}`"
       >
         <div class="accordion-body">
-          {{ sub.text }}
+          <ItensAulas
+            :componentId="`tabs-${subAccordionId}-${subIndex}`"
+            :tabs="getTitleForSubAccordion(subIndex)"
+          />
         </div>
       </div>
     </div>
   </div>
 </template>
   
-  <script>
+<script>
+import ItensAulas from './ItensAulas.vue';
+
 export default {
-  name: "SubAccordion",
+  name: "Aulas",
+
+  components: {ItensAulas},
+
   props: {
     items: {
       type: Array,
@@ -53,12 +64,30 @@ export default {
       default: "subAccordionId",
     },
   },
+
+  data() {
+    return {
+      subAccordionTitles: this.generateTitlesDaata()
+    };
+  },
+
+  methods: {
+    generateTitlesDaata() {
+      return this.items.map((_, index) => [
+        { title: `Aula ${index + 1}`, content: `Conteúdo da Aula ${index + 1}` },
+        { title: `Exercício ${index + 1}`, content: `Conteúdo da Exercício ${index + 1}` },
+        { title: `Material ${index + 1}`, content: `Conteúdo da Material ${index + 1}` },
+      ]);
+    },
+
+    getTitleForSubAccordion(subIndex) {
+      return this.subAccordionTitles[subIndex] || [];
+    }
+  }
 };
 </script>
   
   <style lang="scss" scoped>
-/* Estilo para manter o botão ativo com a cor roxa */
-
 .subHeadingInfo {
   display: flex;
   flex-direction: column;
@@ -75,7 +104,7 @@ export default {
 }
 
 .accordion-button:not(.collapsed) {
-  background-color: #c561c5 !important;
+  background-color: #c28cc2 !important;
   color: white;
 }
 </style>
