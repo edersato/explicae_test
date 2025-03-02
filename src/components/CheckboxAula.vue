@@ -38,7 +38,7 @@
         required: true,
         validator: (value) => value.every(item => 'value' in item && 'label' in item)
       },
-      groupId: { // Nova prop
+      groupId: {
         type: String,
         required: true
       }

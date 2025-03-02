@@ -74,9 +74,9 @@ export default {
   methods: {
     generateTitlesDaata() {
       return this.items.map((_, index) => [
-        { title: `Aula ${index + 1}`, content: `Conteúdo da Aula ${index + 1}` },
-        { title: `Exercício ${index + 1}`, content: `Conteúdo da Exercício ${index + 1}` },
-        { title: `Material ${index + 1}`, content: `Conteúdo da Material ${index + 1}` },
+        { title: `Aula ${index + 1}`},
+        { title: `Exercício ${index + 1}`},
+        { title: `Material ${index + 1}`},
       ]);
     },
 
@@ -104,7 +104,7 @@ export default {
 }
 
 .accordion-button:not(.collapsed) {
-  background-color: #c28cc2 !important;
+  background-color: #eccbfc;
   color: white;
 }
 </style>
