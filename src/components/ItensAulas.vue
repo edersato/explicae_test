@@ -61,11 +61,11 @@ export default {
         },
         {
           title: "Exercicio 2",
-          content: "Conteúdo da Exercicio 2",
+          content: "Conteúdo do Exercicio 2",
         },
         {
           title: "Material 3",
-          content: "Conteúdo da Material 3",
+          content: "Conteúdo do Material 3",
         },
       ],
     },
@@ -86,6 +86,17 @@ export default {
 };
 </script>
   
-  <style scoped>
+<style lang="scss" scoped>
+
+.nav {
+    --bs-nav-link-color: #000;
+    --bs-nav-link-hover-color: #000;
+}
+
+.nav-tabs {
+    --bs-nav-tabs-link-active-color: #000;
+    --bs-nav-tabs-link-active-bg: #eccbfc;
+}
+
 </style>
   
