@@ -1,6 +1,5 @@
 <template>
   <div>
-    <!-- Navegação de Tabs utilizando Bootstrap -->
     <ul class="nav nav-tabs" role="tablist">
       <li class="nav-item" v-for="(tab, index) in tabs" :key="index">
         <button
@@ -14,11 +13,12 @@
           :aria-controls="`tab-pane-${componentId}-${index}`"
           :aria-selected="activeTab === index ? 'true' : 'false'"
         >
-          {{ tab.title }}
+          <span class="tabs-header">{{ tab.title }}</span>
+          <span class="tabs-header">{{ tab.subtitle }}</span>
         </button>
       </li>
     </ul>
-    <div class="tab-content mt-3">
+    <div class="tab-content mt-3 content-body">
       <div
         v-for="(tab, index) in tabs"
         :key="index"
@@ -28,75 +28,107 @@
         role="tabpanel"
         :aria-labelledby="`tab-${componentId}-${index}`"
       >
-        <div class="container mt-4">
-          <h3>Conteúdos dessa aula:</h3>
-          <CheckboxAula
-            :items="checkboxItems"
-            :groupId="`${componentId}-${index}`"
-          />
+        <div class="p-3">
+          <div class="d-flex align-items-center justify-content-between mx-3">
+            <h4>{{ tabs[activeTab]?.title || '' }}</h4>
+            <h5>05 aulas | 01:00:00</h5>
+          </div>
+          <CheckboxAula :items="checkboxItems" :groupId="`${componentId}-${index}`" />
         </div>
       </div>
     </div>
   </div>
 </template>
-  
-  <script>
+
+<script>
 import CheckboxAula from "./CheckboxAula.vue";
+
 export default {
   name: "ItensAulas",
-
   components: { CheckboxAula },
-
   props: {
-    componentId: {
-      type: String,
-      required: true,
-    },
+    componentId: { type: String, required: true },
     tabs: {
       type: Array,
       default: () => [
-        {
-          title: "Aula 1",
-          content: "Conteúdo da Aula 1",
-        },
-        {
-          title: "Exercicio 2",
-          content: "Conteúdo do Exercicio 2",
-        },
-        {
-          title: "Material 3",
-          content: "Conteúdo do Material 3",
-        },
+        { title: "Aula", subtitle: " | 01:00:00" },
+        { title: "Exercício", subtitle: " | 01:00:00" },
+        { title: "Material", subtitle: " | 01:00:00" },
       ],
     },
   },
-
   data() {
     return {
       activeTab: 0,
-      checkboxItems: [
-        { value: "op1", label: "Opção 1" },
-        { value: "op2", label: "Opção 2" },
-        { value: "op3", label: "Opção 3" },
-        { value: "op4", label: "Opção 4" },
-        { value: "op5", label: "Opção 5" },
-      ],
     };
+  },
+  computed: {
+    checkboxItems() {
+      const subItemsMap = {
+        Aula: [
+          { title: "Gramática" },
+          { title: "Ortografia" },
+          { title: "Pontuação" },
+          { title: "Concordância" },
+          { title: "Coesão" },
+        ],
+        Exercício: [
+          { title: "Interpretação" },
+          { title: "Resolução" },
+          { title: "Análise" },
+          { title: "Prática" },
+          { title: "Aplicação" },
+        ],
+        Material: [
+          { title: "Leitura" },
+          { title: "Referência" },
+          { title: "Conteúdo" },
+          { title: "Resumo" },
+          { title: "Dicas" },
+        ],
+      };
+      const baseKey = this.tabs[this.activeTab].title.replace(/[0-9]/g, "").trim();
+      const subItems = subItemsMap[baseKey] || [];
+      const time = "00:12:00";
+      return subItems.map((item, index) => ({
+        value: `${baseKey.toLowerCase()}opt${index + 1}`,
+        label: `Questões sobre ${item.title}`,
+        time: time,
+      }));
+    },
   },
 };
 </script>
-  
-<style lang="scss" scoped>
 
+<style lang="scss" scoped>
 .nav {
-    --bs-nav-link-color: #000;
-    --bs-nav-link-hover-color: #000;
+  --bs-nav-link-color: #000;
+  --bs-nav-link-hover-color: #000;
 }
 
 .nav-tabs {
-    --bs-nav-tabs-link-active-color: #000;
-    --bs-nav-tabs-link-active-bg: #eccbfc;
+  --bs-nav-tabs-link-active-color: #000;
+  --bs-nav-tabs-link-active-bg: #eccbfc;
 }
 
+.nav-link {
+  border-bottom: 4px solid transparent;
+}
+
+.nav-link.active {
+  border-bottom: 4px solid #6e04c0 !important;
+}
+
+.tabs-header {
+  &:first-child {
+    font-weight: 300;
+  }
+  &:last-child {
+    font-weight: 500;
+  }
+}
+
+.content-body {
+  background-color: #eff0f0;
+}
 </style>
-  
