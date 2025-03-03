@@ -20,10 +20,9 @@ export default {
   components: {
     Cadernos,
   },
-
-  data() {
-    return {
-      accordionLanguage: [
+  computed: {
+    accordionLanguage() {
+      return [
         {
           title: "1. Interpretação de Textos",
           aulas: "Aulas: 1193 | 100h 22m",
@@ -31,8 +30,10 @@ export default {
           materiais: "Materiais: 53 | 86h 03m",
           active: true,
         },
-      ],
-      accordionGrammar: [
+      ];
+    },
+    accordionGrammar() {
+      return [
         {
           title: "2. Gramática",
           aulas: "Aulas: 86 | 14h 41m",
@@ -40,8 +41,8 @@ export default {
           materiais: "Materiais: 10 | 10h 00m",
           active: false,
         },
-      ],
-    };
+      ];
+    },
   },
 };
 </script>

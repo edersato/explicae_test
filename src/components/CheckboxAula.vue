@@ -1,68 +1,95 @@
-<!-- components/CheckboxAula.vue -->
 <template>
-    <div>
-      <div 
-        v-for="(item, index) in items" 
-        :key="index" 
-        class="form-check"
-      >
-        <input
-          type="checkbox"
-          class="form-check-input"
-          :id="`checkbox-${groupId}-${index}`"
-          :value="item.value"
-          v-model="selectedValues"
-        />
-        <label 
-          class="form-check-label" 
-          :for="`checkbox-${groupId}-${index}`"
-        >
+  <div>
+    <div v-for="(item, index) in items" :key="index" class="form-check my-3">
+      <input
+        class="form-check-input"
+        type="checkbox"
+        :id="`${groupId}-${index}`"
+        :value="item.value"
+        v-model="selected"
+      />
+      <div class="d-flex justify-content-between mx-3">
+        <label class="form-check-label" :for="`${groupId}-${index}`">
           {{ item.label }}
         </label>
+        <span>{{ item.time }}</span>
       </div>
-      
-      <span class="d-block mt-2">
-        {{ formattedSelectedCount }} de {{ formattedTotalItems }}
-      </span>
     </div>
-  </template>
-  
-  <script>
-  import { computed } from 'vue';
-  import { useStore } from 'vuex';
-  
-  export default {
-    props: {
-      items: {
-        type: Array,
-        required: true,
-        validator: (value) => value.every(item => 'value' in item && 'label' in item)
-      },
-      groupId: {
-        type: String,
-        required: true
+    <div class="progress my-3">
+      <div
+        class="progress-bar"
+        role="progressbar"
+        :style="progressBarStyle"
+        :aria-valuenow="progressPercentage"
+        aria-valuemin="0"
+        aria-valuemax="100"
+      >
+        {{ progressPercentage }}%
+      </div>
+    </div>
+    <div
+      v-if="showToast"
+      class="toast show position-fixed top-0 end-0 m-3"
+      style="z-index: 9999;"
+      role="alert"
+      aria-live="assertive"
+      aria-atomic="true"
+    >
+      <div class="toast-header">
+        <strong class="me-auto">Parabéns</strong>
+        <button type="button" class="btn-close" @click="showToast = false"></button>
+      </div>
+      <div class="toast-body">
+        Seção concluída com sucesso!
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  name: "CheckboxAula",
+  props: {
+    items: { type: Array, required: true },
+    groupId: { type: String, required: true },
+  },
+  data() {
+    return {
+      selected: [],
+      showToast: false,
+    };
+  },
+  computed: {
+    progressPercentage() {
+      const count = Math.min(this.selected.length, 5);
+      return (count / 5) * 100;
+    },
+    progressBarStyle() {
+      return {
+        width: `${this.progressPercentage}%`,
+        transition: "width 2s, background-color 2s",
+        backgroundColor: this.progressPercentage < 100 ? "#6f42c1" : "#198754",
+      };
+    },
+  },
+  watch: {
+    selected(newVal) {
+      this.$store.commit("updateSelectedCount", newVal.length);
+      if (newVal.length === 5 && !this.showToast) {
+        this.showToast = true;
+        setTimeout(() => {
+          this.showToast = false;
+        }, 7000);
       }
     },
-    setup(props) {
-      const store = useStore();
-  
-      const selectedValues = computed({
-        get: () => store.state.selectedCheckboxes[props.groupId] || [],
-        set: (value) => store.dispatch('updateSelectedCheckboxes', {
-          groupId: props.groupId,
-          values: value
-        })
-      });
-  
-      const formattedSelectedCount = computed(() => {
-        return store.getters.selectedCount(props.groupId).toString().padStart(2, '0');
-      });
-  
-      const formattedTotalItems = computed(() => {
-        return props.items.length.toString().padStart(2, '0');
-      });
-  
-      return { selectedValues, formattedSelectedCount, formattedTotalItems };
-    }
-  };
-  </script>
+  },
+};
+</script>
+
+<style lang="scss" scoped>
+input[type="checkbox"] {
+  border: 2.5px solid black;
+  border-radius: 0.5px;
+  background-color: #6f42c1;
+}
+</style>
